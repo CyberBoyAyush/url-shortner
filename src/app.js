@@ -34,6 +34,27 @@ app.post('/shorten', (req, res) => {
   res.status(201).json({ code, originalUrl: url });
 });
 
+// GET /:code - Redirect to original URL
+app.get('/:code', (req, res) => {
+  const { code } = req.params;
+  const originalUrl = urlStore.get(code);
+  
+  if (!originalUrl) {
+    return res.status(404).json({ error: 'Short code not found' });
+  }
+  
+  res.redirect(302, originalUrl);
+});
+
+// GET /health - Health check endpoint
+app.get('/health', (req, res) => {
+  res.json({ 
+    status: 'ok', 
+    timestamp: Date.now(),
+    uptime: process.uptime()
+  });
+});
+
 // Start server if not in test mode
 if (process.env.NODE_ENV !== 'test') {
   const PORT = process.env.PORT || 3000;
