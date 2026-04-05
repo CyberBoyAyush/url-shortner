@@ -34,6 +34,15 @@ app.post('/shorten', (req, res) => {
   res.status(201).json({ code, originalUrl: url });
 });
 
+// GET /health - Health check endpoint
+app.get('/health', (req, res) => {
+  res.json({ 
+    status: 'ok', 
+    timestamp: Date.now(),
+    uptime: process.uptime()
+  });
+});
+
 // GET /:code - Redirect to original URL
 app.get('/:code', (req, res) => {
   const { code } = req.params;
@@ -44,15 +53,6 @@ app.get('/:code', (req, res) => {
   }
   
   res.redirect(302, originalUrl);
-});
-
-// GET /health - Health check endpoint
-app.get('/health', (req, res) => {
-  res.json({ 
-    status: 'ok', 
-    timestamp: Date.now(),
-    uptime: process.uptime()
-  });
 });
 
 // Start server if not in test mode

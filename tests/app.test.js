@@ -48,7 +48,7 @@ describe('URL Shortener API', () => {
       const { code } = shortenResponse.body;
 
       await request(app)
-        .get(\`\${code}\`)
+        .get(`/${code}`)
         .expect(302)
         .expect('Location', 'https://google.com');
     });
