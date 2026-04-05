@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL Shortener</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #0d9488;
+            --primary-dark: #0f766e;
+            --primary-light: #ccfbf1;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-400: #9ca3af;
+            --gray-500: #6b7280;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+            --success: #10b981;
+            --error: #ef4444;
+            --white: #ffffff;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(180deg, #f0fdfa 0%, #ffffff 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 24px;
+        }
+
+        .container {
+            background: var(--white);
+            border-radius: 16px;
+            box-shadow: var(--shadow-xl);
+            border: 1px solid var(--gray-200);
+            width: 100%;
+            max-width: 480px;
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            padding: 40px 32px;
+            text-align: center;
+            color: var(--white);
+        }
+
+        .logo {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 56px;
+            height: 56px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 14px;
+            margin-bottom: 16px;
+        }
+
+        .logo i {
+            width: 28px;
+            height: 28px;
+            color: white;
+        }
+
+        h1 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            letter-spacing: -0.025em;
+        }
+
+        .subtitle {
+            font-size: 0.95rem;
+            opacity: 0.9;
+            font-weight: 400;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .subtitle i {
+            width: 16px;
+            height: 16px;
+            opacity: 0.8;
+        }
+
+        .content {
+            padding: 32px;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--gray-700);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        label i {
+            width: 16px;
+            height: 16px;
+            color: var(--gray-500);
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray-400);
+            pointer-events: none;
+        }
+
+        .input-icon i {
+            width: 20px;
+            height: 20px;
+        }
+
+        input[type="url"] {
+            width: 100%;
+            padding: 14px 16px 14px 44px;
+            font-size: 1rem;
+            font-family: inherit;
+            border: 2px solid var(--gray-200);
+            border-radius: 10px;
+            background: var(--white);
+            color: var(--gray-800);
+            transition: all 0.2s ease;
+        }
+
+        input[type="url"]:hover {
+            border-color: var(--gray-300);
+        }
+
+        input[type="url"]:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px var(--primary-light);
+        }
+
+        input[type="url"]::placeholder {
+            color: var(--gray-400);
+        }
+
+        button[type="submit"] {
+            width: 100%;
+            padding: 14px 24px;
+            font-size: 1rem;
+            font-weight: 600;
+            font-family: inherit;
+            color: var(--white);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        button[type="submit"] i {
+            width: 18px;
+            height: 18px;
+        }
+
+        button[type="submit"]:hover {
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        button[type="submit"]:active {
+            transform: translateY(0);
+        }
+
+        button[type="submit"]:disabled {
+            background: var(--gray-300);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .result-box {
+            margin-top: 24px;
+            padding: 20px;
+            background: var(--gray-50);
+            border-radius: 12px;
+            border: 1px solid var(--gray-200);
+            display: none;
+        }
+
+        .result-box.show {
+            display: block;
+            animation: fadeInUp 0.3s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .result-header {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 12px;
+        }
+
+        .result-header i {
+            width: 14px;
+            height: 14px;
+            color: var(--success);
+        }
+
+        .result-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--gray-500);
+        }
+
+        .url-container {
+            display: flex;
+            gap: 12px;
+            background: var(--white);
+            border: 2px solid var(--gray-200);
+            border-radius: 10px;
+            padding: 4px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .url-link {
+            flex: 1;
+            min-width: 0;
+            padding: 10px 12px;
+            font-size: 0.9375rem;
+            font-weight: 500;
+            color: var(--primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            border-radius: 6px;
+            transition: background 0.2s ease;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .url-link i {
+            width: 16px;
+            height: 16px;
+            flex-shrink: 0;
+        }
+
+        .url-link:hover {
+            background: var(--gray-50);
+        }
+
+        .copy-button {
+            padding: 10px 16px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--white);
+            background: var(--primary);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-shrink: 0;
+        }
+
+        .copy-button i {
+            width: 16px;
+            height: 16px;
+        }
+
+        .copy-button:hover {
+            background: var(--primary-dark);
+        }
+
+        .copy-button.copied {
+            background: var(--success);
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 24px 0;
+        }
+
+        .loading.show {
+            display: block;
+        }
+
+        .spinner {
+            width: 32px;
+            height: 32px;
+            border: 3px solid var(--gray-200);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 12px;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .loading p {
+            font-size: 0.875rem;
+            color: var(--gray-500);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .error-box {
+            margin-top: 16px;
+            padding: 14px 16px;
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            border-radius: 10px;
+            color: var(--error);
+            font-size: 0.875rem;
+            display: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .error-box i {
+            width: 18px;
+            height: 18px;
+            flex-shrink: 0;
+        }
+
+        .error-box.show {
+            display: flex;
+            animation: fadeInUp 0.3s ease;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 1px solid var(--gray-200);
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 16px;
+            background: var(--gray-50);
+            border-radius: 10px;
+            border: 1px solid var(--gray-200);
+        }
+
+        .stat-icon {
+            margin-bottom: 6px;
+        }
+
+        .stat-icon i {
+            width: 20px;
+            height: 20px;
+            color: var(--primary);
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .stat-value i {
+            width: 16px;
+            height: 16px;
+        }
+
+        .stat-value .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--error);
+        }
+
+        .stat-value .status-dot.online {
+            background: var(--success);
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: var(--gray-500);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 20px 32px;
+            background: var(--gray-50);
+            border-top: 1px solid var(--gray-200);
+        }
+
+        .footer p {
+            font-size: 0.75rem;
+            color: var(--gray-500);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .footer i {
+            width: 14px;
+            height: 14px;
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            body {
+                padding: 16px;
+                background: var(--white);
+            }
+
+            .container {
+                border-radius: 0;
+                border: none;
+                box-shadow: none;
+                max-width: 100%;
+            }
+
+            .header {
+                padding: 32px 24px;
+            }
+
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            .content {
+                padding: 24px;
+            }
+
+            .url-container {
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .url-link {
+                white-space: normal;
+                word-break: break-all;
+            }
+
+            .copy-button {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .header {
+                padding: 24px 20px;
+            }
+
+            .content {
+                padding: 20px;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">
+                <i data-lucide="link"></i>
+            </div>
+            <h1>URL Shortener</h1>
+            <p class="subtitle">
+                <i data-lucide="sparkles"></i>
+                Transform long links into clean, shareable URLs
+            </p>
+        </div>
+
+        <div class="content">
+            <form id="shortenForm">
+                <div class="form-group">
+                    <label for="urlInput">
+                        <i data-lucide="globe"></i>
+                        Enter your URL
+                    </label>
+                    <div class="input-wrapper">
+                        <div class="input-icon">
+                            <i data-lucide="link-2"></i>
+                        </div>
+                        <input 
+                            type="url" 
+                            id="urlInput" 
+                            placeholder="https://example.com/very/long/url" 
+                            required
+                            autocomplete="off"
+                        >
+                    </div>
+                </div>
+                
+                <button type="submit" id="submitBtn">
+                    <i data-lucide="scissors"></i>
+                    <span>Shorten URL</span>
+                </button>
+            </form>
+
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <p>
+                    <i data-lucide="loader-2"></i>
+                    Creating short link...
+                </p>
+            </div>
+
+            <div class="result-box" id="resultBox">
+                <div class="result-header">
+                    <i data-lucide="check-circle-2"></i>
+                    <span class="result-label">Your Shortened URL</span>
+                </div>
+                <div class="url-container">
+                    <a id="shortUrl" href="#" target="_blank" class="url-link">
+                        <i data-lucide="external-link"></i>
+                        <span id="urlText"></span>
+                    </a>
+                    <button class="copy-button" id="copyBtn">
+                        <i data-lucide="copy"></i>
+                        <span>Copy</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="error-box" id="errorBox">
+                <i data-lucide="alert-circle"></i>
+                <span id="errorText"></span>
+            </div>
+
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i data-lucide="link"></i>
+                    </div>
+                    <div class="stat-value" id="urlCount">0</div>
+                    <div class="stat-label">URLs Shortened</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i data-lucide="activity"></i>
+                    </div>
+                    <div class="stat-value">
+                        <span class="status-dot" id="statusDot"></span>
+                    </div>
+                    <div class="stat-label" id="statusText">Offline</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>
+                <i data-lucide="code-2"></i>
+                Built with Node.js + Express • DevOps Assignment
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        const API_URL = 'http://localhost:3000';
+        let urlCount = 0;
+
+        // Check API status
+        async function checkStatus() {
+            try {
+                const response = await fetch(`${API_URL}/health`);
+                if (response.ok) {
+                    document.getElementById('statusDot').classList.add('online');
+                    document.getElementById('statusText').textContent = 'Online';
+                } else {
+                    document.getElementById('statusDot').classList.remove('online');
+                    document.getElementById('statusText').textContent = 'Error';
+                }
+            } catch {
+                document.getElementById('statusDot').classList.remove('online');
+                document.getElementById('statusText').textContent = 'Offline';
+            }
+        }
+
+        checkStatus();
+        setInterval(checkStatus, 10000);
+
+        // Handle form submission
+        document.getElementById('shortenForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const urlInput = document.getElementById('urlInput');
+            const submitBtn = document.getElementById('submitBtn');
+            const loading = document.getElementById('loading');
+            const resultBox = document.getElementById('resultBox');
+            const errorBox = document.getElementById('errorBox');
+            
+            // Reset
+            resultBox.classList.remove('show');
+            errorBox.classList.remove('show');
+            
+            // Show loading
+            loading.classList.add('show');
+            submitBtn.disabled = true;
+            
+            try {
+                const response = await fetch(`${API_URL}/shorten`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ url: urlInput.value })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    const shortUrl = `${window.location.origin}/${data.code}`;
+                    document.getElementById('shortUrl').href = shortUrl;
+                    document.getElementById('urlText').textContent = shortUrl;
+                    resultBox.classList.add('show');
+                    
+                    urlCount++;
+                    document.getElementById('urlCount').textContent = urlCount;
+                    urlInput.value = '';
+                } else {
+                    document.getElementById('errorText').textContent = data.error || 'Failed to shorten URL';
+                    errorBox.classList.add('show');
+                }
+            } catch (err) {
+                document.getElementById('errorText').textContent = 'Cannot connect to server. Please check if the backend is running.';
+                errorBox.classList.add('show');
+                document.getElementById('statusDot').classList.remove('online');
+                document.getElementById('statusText').textContent = 'Offline';
+            } finally {
+                loading.classList.remove('show');
+                submitBtn.disabled = false;
+            }
+        });
+
+        // Copy functionality
+        document.getElementById('copyBtn').addEventListener('click', () => {
+            const url = document.getElementById('shortUrl').href;
+            navigator.clipboard.writeText(url).then(() => {
+                const btn = document.getElementById('copyBtn');
+                btn.classList.add('copied');
+                btn.innerHTML = `
+                    <i data-lucide="check"></i>
+                    <span>Copied!</span>
+                `;
+                lucide.createIcons();
+                setTimeout(() => {
+                    btn.classList.remove('copied');
+                    btn.innerHTML = `
+                        <i data-lucide="copy"></i>
+                        <span>Copy</span>
+                    `;
+                    lucide.createIcons();
+                }, 2000);
+            });
+        });
+    </script>
+</body>
+</html>

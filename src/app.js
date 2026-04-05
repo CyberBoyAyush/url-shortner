@@ -4,6 +4,9 @@ const crypto = require('crypto');
 const app = express();
 app.use(express.json());
 
+// Serve static files from public directory
+app.use(express.static('public'));
+
 // In-memory URL storage
 const urlStore = new Map();
 
