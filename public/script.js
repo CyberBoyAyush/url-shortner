@@ -35,6 +35,17 @@
             return;
         }
 
+        try {
+            var parsed = new URL(url);
+            if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') {
+                showError('Please enter a valid URL (http or https).');
+                return;
+            }
+        } catch (e) {
+            showError('Please enter a valid URL.');
+            return;
+        }
+
         shortenBtn.classList.add('loading');
         shortenBtn.disabled = true;
         hideResult();
@@ -75,7 +86,7 @@
     shortenBtn.addEventListener('click', shortenUrl);
 
     urlInput.addEventListener('keydown', function (e) {
-        if (e.key === 'Enter') {
+        if (e.key === 'Enter' && !shortenBtn.disabled) {
             shortenUrl();
         }
     });
@@ -109,6 +120,8 @@
             setTimeout(function () {
                 copyBtn.classList.remove('copied');
             }, 2000);
+        }).catch(function () {
+            showError('Failed to copy URL to clipboard.');
         });
     });
 
@@ -135,7 +148,7 @@
             healthStatus.textContent = 'Healthy';
             healthStatus.className = 'gauge-status healthy';
             healthSub.textContent = 'Uptime: ' + Math.floor(data.uptime) + 's';
-            animateCounter(uptimeCounter, 99, '%');
+            animateCounter(uptimeCounter, 100, '%');
         } else {
             gaugeFill.style.stroke = '#EF4444';
             gaugeFill.style.strokeDashoffset = ARC_LENGTH * 0.85;

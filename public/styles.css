@@ -309,7 +309,7 @@ h1 {
 }
 
 .result-box.visible {
-    max-height: 110px;
+    max-height: 200px;
     opacity: 1;
     padding-top: 16px;
 }
