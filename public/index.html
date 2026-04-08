@@ -10,14 +10,11 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <!-- Navigation -->
     <nav>
         <div class="logo">url shortner.</div>
     </nav>
 
-    <!-- Main Hero Section -->
     <main class="hero">
-        <!-- Left Side: Content -->
         <section class="hero-left">
             <span class="tag">CREATE. SHARE. TRACK</span>
             <h1>Shorten links<br><span class="accent">Amplify reach</span></h1>
@@ -39,7 +36,6 @@
             </div>
         </section>
 
-        <!-- Right Side: Functionality -->
         <section class="hero-right">
             <div class="shortener-card">
                 <div class="card-header">
@@ -49,7 +45,7 @@
                     <input
                         type="url"
                         id="urlInput"
-                        placeholder="Paste your long URL"
+                        placeholder="Paste the long URL"
                         autocomplete="off"
                         spellcheck="false"
                     >
@@ -85,7 +81,6 @@
                 </div>
             </div>
 
-            <!-- Health Check Gauge -->
             <div class="health-section">
                 <div>
                     <span class="health-label">API STATUS</span>
@@ -97,13 +92,12 @@
                               stroke-dasharray="251.327" stroke-dashoffset="251.327"/>
                     </svg>
                 </div>
-                <span class="gauge-status healthy" id="healthStatus">Connecting...</span>
+                <span class="gauge-status" id="healthStatus">Connecting...</span>
                 <span class="health-sub" id="healthSub"></span>
             </div>
         </section>
     </main>
 
-    <!-- Footer -->
     <footer>
         <p>BUILT WITH <span class="heart">&hearts;</span> FOR FASTER CLICKS</p>
     </footer>

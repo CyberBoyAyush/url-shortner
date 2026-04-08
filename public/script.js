@@ -1,10 +1,8 @@
 (function () {
     'use strict';
 
-    // ---- State ----
     var urlCount = parseInt(localStorage.getItem('urlCount')) || 0;
 
-    // ---- DOM References ----
     var urlInput = document.getElementById('urlInput');
     var shortenBtn = document.getElementById('shortenBtn');
     var resultBox = document.getElementById('resultBox');
@@ -18,16 +16,17 @@
     var healthStatus = document.getElementById('healthStatus');
     var healthSub = document.getElementById('healthSub');
 
-    // ---- Constants ----
     var ARC_LENGTH = 251.327;
     var HEALTH_CHECK_INTERVAL = 10000;
 
-    // ---- Init: restore saved counter ----
-    urlCounter.textContent = urlCount;
-
-    // ========================================
-    // URL SHORTENING
-    // ========================================
+    if (urlCount > 0) {
+        urlCounter.textContent = '0';
+        setTimeout(function () {
+            animateCounter(urlCounter, urlCount, '+');
+        }, 300);
+    } else {
+        urlCounter.textContent = '0';
+    }
 
     function shortenUrl() {
         var url = urlInput.value.trim();
@@ -58,7 +57,7 @@
                 showResult();
                 urlCount++;
                 localStorage.setItem('urlCount', urlCount);
-                animateCounter(urlCounter, urlCount);
+                animateCounter(urlCounter, urlCount, '+');
                 urlInput.value = '';
             } else {
                 showError(result.data.error || 'Failed to shorten URL.');
@@ -81,10 +80,6 @@
         }
     });
 
-    // ========================================
-    // RESULT & ERROR DISPLAY
-    // ========================================
-
     function showResult() {
         resultBox.classList.add('visible');
     }
@@ -105,10 +100,6 @@
         errorBox.classList.remove('visible');
     }
 
-    // ========================================
-    // COPY TO CLIPBOARD
-    // ========================================
-
     copyBtn.addEventListener('click', function () {
         var url = resultUrl.textContent;
         if (!url) return;
@@ -120,10 +111,6 @@
             }, 2000);
         });
     });
-
-    // ========================================
-    // HEALTH CHECK & GAUGE
-    // ========================================
 
     function checkHealth() {
         fetch('/health')
@@ -162,14 +149,10 @@
     checkHealth();
     setInterval(checkHealth, HEALTH_CHECK_INTERVAL);
 
-    // ========================================
-    // ANIMATED COUNTER
-    // ========================================
-
     function animateCounter(element, target, suffix) {
         suffix = suffix || '';
         var current = parseInt(element.textContent) || 0;
-        var duration = 600;
+        var duration = current === 0 ? 1200 : 600;
         var startTime = performance.now();
 
         function update(now) {
@@ -186,10 +169,6 @@
 
         requestAnimationFrame(update);
     }
-
-    // ========================================
-    // SHAKE ANIMATION
-    // ========================================
 
     var shakeStyle = document.createElement('style');
     shakeStyle.textContent = [

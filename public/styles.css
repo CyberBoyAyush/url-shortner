@@ -1,14 +1,9 @@
-
-
 :root {
-    /* Pink Palette */
     --primary: #E11D48;
     --primary-dark: #BE123C;
     --primary-accent: #FB7185;
     --primary-muted: #FFE4E6;
     --primary-subtle: #FFF1F2;
-
-    /* Colors */
     --bg: #FFFFFF;
     --bg-secondary: #FAFAFA;
     --text: #0A0A0A;
@@ -23,17 +18,11 @@
     --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
     --shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
     --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.1);
-
-    /* Fonts */
     --font-serif: 'Prata', Georgia, 'Times New Roman', serif;
     --font-sans: 'Lato', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-
-    /* Layout */
     --nav-height: 64px;
     --max-width: 1200px;
 }
-
-
 
 *,
 *::before,
@@ -96,7 +85,6 @@ nav {
     width: 100%;
 }
 
-/* Left Side */
 .hero-left {
     flex: 1;
     max-width: 520px;
@@ -147,7 +135,6 @@ h1 {
     animation-delay: 0.3s;
 }
 
-/* Stats Row */
 .stats-row {
     display: flex;
     align-items: center;
@@ -185,7 +172,6 @@ h1 {
     background-color: var(--border);
 }
 
-/* Right Side */
 .hero-right {
     flex: 1;
     max-width: 440px;
@@ -225,7 +211,6 @@ h1 {
     color: var(--primary);
 }
 
-/* Input Group */
 .input-group {
     display: flex;
     flex-direction: column;
@@ -253,7 +238,6 @@ h1 {
     border-color: var(--primary);
 }
 
-/* Shorten Button */
 .shorten-btn {
     width: 100%;
     padding: 14px 24px;
@@ -317,7 +301,6 @@ h1 {
     to { transform: translate(-50%, -50%) rotate(360deg); }
 }
 
-/* Result Box */
 .result-box {
     max-height: 0;
     overflow: hidden;
@@ -361,7 +344,6 @@ h1 {
     line-height: 1.4;
 }
 
-/* Copy Button — icon only */
 .copy-btn {
     display: flex;
     align-items: center;
@@ -402,7 +384,6 @@ h1 {
     display: block;
 }
 
-/* Error Box */
 .error-box {
     display: flex;
     align-items: center;
@@ -435,13 +416,11 @@ h1 {
 
 
 .health-section {
-    background: linear-gradient(135deg, var(--primary-subtle) 0%, var(--bg) 100%);
-    border: 1px solid var(--primary-muted);
-    padding: 24px 28px 20px;
+    border: 1px solid var(--border);
+    padding: 20px 28px 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 8px;
     box-shadow: var(--shadow-sm);
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
     position: relative;
